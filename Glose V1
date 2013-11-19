@@ -1,0 +1,648 @@
+Public Class Form2
+    Const maxant As Integer = 1000
+    Dim Glose(0 To maxant, 0 To 4) As String
+    Dim RettSvar As String
+    Dim Norsk As Integer = 1
+    Dim Engelsk As Integer = 2
+    Dim Tysk As Integer = 3
+    Dim Fransk As Integer = 4
+    Dim TilSprak As Integer
+    Dim FraSprak As Integer
+    Dim AntRiktig As Integer
+    Dim AntFeil As Integer
+    Dim hopp As Integer
+    Dim Poeng As Integer
+
+    Dim AntGloser As Integer
+    Dim AntForsok As Integer
+    Private Sub Statistikk()
+        lblStatestikk.Text = ("Antall poeng er: ") & Poeng & vbNewLine & ("Antall riktige: ") & (AntRiktig) & vbNewLine & ("Antall feil: ") & AntFeil & vbNewLine & ("Antall hoppet over : ") & hopp & vbNewLine & "Antall forsøk: " & AntForsok
+    End Sub
+
+
+    Private Sub RettProsedyre()
+        MsgBox("Riktig svar!")
+        SvarProsedyre()
+        AntRiktig = AntRiktig + 1
+        AntForsok = AntForsok + 1
+        Poeng = Poeng + 10
+        Statistikk()
+    End Sub
+    Private Sub FeilProsedyre()
+
+        MsgBox("Galt svar! Det riktig svaret er: " + RettSvar)
+        SvarProsedyre()
+        AntFeil = AntFeil + 1
+        Poeng = Poeng - 5
+        AntForsok = AntForsok + 1
+        Statistikk()
+    End Sub
+    Private Sub SvarProsedyre()
+        Dim SvarAlt1, SvarAlt2, SvarAlt3, SvarAlt4, SvarAlt5 As String
+        If ListFra.SelectedItem = "Norsk" Then
+            FraSprak = 1
+        ElseIf ListFra.SelectedItem = "Engelsk" Then
+            FraSprak = 2
+        ElseIf ListFra.SelectedItem = "Tysk" Then
+            FraSprak = 3
+        ElseIf ListFra.SelectedItem = "Fransk" Then
+            FraSprak = 4
+        Else
+            MsgBox("Velg fra språk")
+        End If
+
+        If ListTil.SelectedItem = "Norsk" Then
+            TilSprak = 1
+        ElseIf ListTil.SelectedItem = "Engelsk" Then
+            TilSprak = 2
+        ElseIf ListTil.SelectedItem = "Tysk" Then
+            TilSprak = 3
+        ElseIf ListTil.SelectedItem = "Fransk" Then
+            TilSprak = 4
+        Else
+            MsgBox("Velg fra språk")
+        End If
+
+        If TilSprak = FraSprak Then
+            MsgBox("Du kan ikke velg samme språk", , "Feilmelding")
+        Else
+            Randomize()
+            Dim RandomTall As Integer = CInt(Int((115 * Rnd()) + 1))
+            Do
+                RettSvar = Glose(RandomTall, TilSprak)
+                SvarAlt1 = RettSvar
+                SvarAlt2 = Glose(CInt(Int((115 * Rnd()) + 1)), TilSprak)
+                SvarAlt3 = Glose(CInt(Int((115 * Rnd()) + 1)), TilSprak)
+                SvarAlt4 = Glose(CInt(Int((115 * Rnd()) + 1)), TilSprak)
+                SvarAlt5 = Glose(CInt(Int((115 * Rnd()) + 1)), TilSprak)
+                'Looper igjennom alle alternativene helt til alle er ulike!
+            Loop Until RettSvar <> SvarAlt2 And RettSvar <> SvarAlt3 And RettSvar <> SvarAlt4 _
+            And RettSvar <> SvarAlt5 And SvarAlt2 <> SvarAlt3 And SvarAlt2 <> SvarAlt4 And SvarAlt2 <> SvarAlt5 _
+            And SvarAlt3 <> SvarAlt4 And SvarAlt3 <> SvarAlt5 And SvarAlt4 <> SvarAlt5
+            ' Husk alternativ løsning STÅLE
+
+            Dim SvarAlternativ(5) As String
+            SvarAlternativ(0) = SvarAlt1
+            SvarAlternativ(1) = SvarAlt2
+            SvarAlternativ(2) = SvarAlt3
+            SvarAlternativ(3) = SvarAlt4
+            SvarAlternativ(4) = SvarAlt5
+
+
+
+            Dim i As Long
+            Dim Temp As Object
+            Dim J As Long
+
+            Randomize()
+            For i = 0 To 4
+                J = CInt(((4 - i) * Rnd()) + i)
+                If i <> J Then
+                    Temp = SvarAlternativ(i)
+                    SvarAlternativ(i) = SvarAlternativ(J)
+                    SvarAlternativ(J) = Temp
+                End If
+            Next i
+
+            lblGlose.Text = Glose(RandomTall, FraSprak)
+            lblSvarAlt1.Text = SvarAlternativ(0)
+            lblSvarAlt2.Text = SvarAlternativ(1)
+            lblSvarAlt3.Text = SvarAlternativ(2)
+            lblSvarAlt4.Text = SvarAlternativ(3)
+            lblSvarAlt5.Text = SvarAlternativ(4)
+
+
+        End If
+    End Sub
+    Private Sub form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Glose(0, 1) = "katt"
+        Glose(0, 2) = "cat"
+        Glose(0, 3) = "katze"
+        Glose(0, 4) = "chat"
+        Glose(1, 1) = "pike"
+        Glose(1, 2) = "girl"
+        Glose(1, 3) = "M„dchen"
+        Glose(1, 4) = "jeune fille"
+        Glose(2, 1) = "bil"
+        Glose(2, 2) = "car"
+        Glose(2, 3) = "Auto"
+        Glose(2, 4) = "voiture"
+        Glose(3, 1) = "hus"
+        Glose(3, 2) = "house"
+        Glose(3, 3) = "Haus"
+        Glose(3, 4) = "maison"
+        Glose(4, 1) = "strand"
+        Glose(4, 2) = "beach"
+        Glose(4, 3) = "Strand"
+        Glose(4, 4) = "plage"
+        Glose(5, 1) = "land"
+        Glose(5, 2) = "country"
+        Glose(5, 3) = "Land"
+        Glose(5, 4) = "pays"
+        Glose(6, 1) = "far"
+        Glose(6, 2) = "father"
+        Glose(6, 3) = "Vater"
+        Glose(6, 4) = "pŠre"
+        Glose(7, 1) = "bord"
+        Glose(7, 2) = "table"
+        Glose(7, 3) = "Tisch"
+        Glose(7, 4) = "table"
+        Glose(8, 1) = "stol"
+        Glose(8, 2) = "chair"
+        Glose(8, 3) = "Stuhl"
+        Glose(8, 4) = "chaise"
+        Glose(9, 1) = "hund"
+        Glose(9, 2) = "dog"
+        Glose(9, 3) = "Hund"
+        Glose(9, 4) = "chien"
+        Glose(10, 1) = "tre"
+        Glose(10, 2) = "tree"
+        Glose(10, 3) = "Baum"
+        Glose(10, 4) = "arbre"
+        Glose(11, 1) = "vann"
+        Glose(11, 2) = "water"
+        Glose(11, 3) = "wasser"
+        Glose(11, 4) = "eau"
+        Glose(12, 1) = "glass"
+        Glose(12, 2) = "glass"
+        Glose(12, 3) = "Glass"
+        Glose(12, 4) = "verre"
+        Glose(13, 1) = "kopp"
+        Glose(13, 2) = "cup"
+        Glose(13, 3) = "Tasse"
+        Glose(13, 4) = "tasse"
+        Glose(14, 1) = "mor"
+        Glose(14, 2) = "mother"
+        Glose(14, 3) = "Mutter"
+        Glose(14, 4) = "maire"
+        Glose(15, 1) = "lys"
+        Glose(15, 2) = "light"
+        Glose(15, 3) = "Licht"
+        Glose(15, 4) = "lumiŠre"
+        Glose(16, 1) = "blyant"
+        Glose(16, 2) = "pencil"
+        Glose(16, 3) = "Bleistift"
+        Glose(16, 4) = "crayon"
+        Glose(17, 1) = "papir"
+        Glose(17, 2) = "paper"
+        Glose(17, 3) = "Papir"
+        Glose(17, 4) = "papier"
+        Glose(18, 1) = "bror"
+        Glose(18, 2) = "brother"
+        Glose(18, 3) = "Bruder"
+        Glose(18, 4) = "frŠre"
+        Glose(19, 1) = "s›ster"
+        Glose(19, 2) = "sister"
+        Glose(19, 3) = "Schwester"
+        Glose(19, 4) = "soeur"
+        Glose(20, 1) = "Knapp"
+        Glose(20, 2) = "Button"
+        Glose(20, 3) = "Taste"
+        Glose(20, 4) = "Bouton"
+        Glose(21, 1) = "Batteri"
+        Glose(21, 2) = "Battery"
+        Glose(21, 3) = "Akku"
+        Glose(21, 4) = "Batterie"
+        Glose(22, 1) = "Glass"
+        Glose(22, 2) = "Glass"
+        Glose(22, 3) = "Glas"
+        Glose(22, 4) = "Verre"
+        Glose(23, 1) = "Tallerken"
+        Glose(23, 2) = "Plate"
+        Glose(23, 3) = "Teller"
+        Glose(23, 4) = "Assiette"
+        Glose(24, 1) = "Kork"
+        Glose(24, 2) = "Cork"
+        Glose(24, 3) = "Kork"
+        Glose(24, 4) = "le liŠge"
+        Glose(25, 1) = "Teppe"
+        Glose(25, 2) = "Blanket"
+        Glose(25, 3) = "Decke"
+        Glose(25, 4) = "Couverture"
+        Glose(26, 1) = "Pute"
+        Glose(26, 2) = "Pillow"
+        Glose(26, 3) = "Kissen"
+        Glose(26, 4) = "Oreiller"
+        Glose(27, 1) = "Vindu"
+        Glose(27, 2) = "Window"
+        Glose(27, 3) = "Fenster"
+        Glose(27, 4) = "fenˆtre"
+        Glose(28, 1) = "Sofa"
+        Glose(28, 2) = "Sofa"
+        Glose(28, 3) = "Sofa"
+        Glose(28, 4) = "Divan"
+        Glose(29, 1) = "Seng"
+        Glose(29, 2) = "Bed"
+        Glose(29, 3) = "Bett"
+        Glose(29, 4) = "lit"
+        Glose(30, 1) = "Strykejern"
+        Glose(30, 2) = "Iron"
+        Glose(30, 3) = "Eisen"
+        Glose(30, 4) = "le fer"
+        Glose(31, 1) = "Skjorte"
+        Glose(31, 2) = "Shirt"
+        Glose(31, 3) = "T-shirt"
+        Glose(31, 4) = "Tee Shirt"
+        Glose(32, 1) = "Blomst"
+        Glose(32, 2) = "flower "
+        Glose(32, 3) = "Blume"
+        Glose(32, 4) = "Des fleurs"
+        Glose(33, 1) = "Statue"
+        Glose(33, 2) = "Statue"
+        Glose(33, 3) = "Statue"
+        Glose(33, 4) = "Statue"
+        Glose(34, 1) = "Gress"
+        Glose(34, 2) = "Grass"
+        Glose(34, 3) = "Gras"
+        Glose(34, 4) = "De l’herbe"
+        Glose(35, 1) = "Gull"
+        Glose(35, 2) = "Gold"
+        Glose(35, 3) = "Gold"
+        Glose(35, 4) = "De l’or"
+        Glose(36, 1) = "Olje"
+        Glose(36, 2) = "Oil"
+        Glose(36, 3) = "™l"
+        Glose(36, 4) = "l’huile"
+        Glose(37, 1) = "Bilde"
+        Glose(37, 2) = "Image"
+        Glose(37, 3) = "Bild"
+        Glose(37, 4) = "l’image"
+        Glose(38, 1) = "H›yttaler"
+        Glose(38, 2) = "Speaker"
+        Glose(38, 3) = "Lautsprecher"
+        Glose(38, 4) = "Le haut-parleur"
+        Glose(39, 1) = "Mikrob›lgeovn"
+        Glose(39, 2) = "Microwave"
+        Glose(39, 3) = "Mikrowelle"
+        Glose(39, 4) = "Micro-ondes"
+        Glose(40, 1) = "Himmel"
+        Glose(40, 2) = "Sky"
+        Glose(40, 3) = "Himmel"
+        Glose(40, 4) = "ciel"
+        Glose(41, 1) = "D›r"
+        Glose(41, 2) = "Door"
+        Glose(41, 3) = "Tr"
+        Glose(41, 4) = "Porte"
+        Glose(42, 1) = "Komfyr"
+        Glose(42, 2) = "Stove"
+        Glose(42, 3) = "Herd"
+        Glose(42, 4) = "d’une cuisiniŠre"
+        Glose(43, 1) = " leke"
+        Glose(43, 2) = "Play"
+        Glose(43, 3) = "Spielen"
+        Glose(43, 4) = "Jouer"
+        Glose(44, 1) = " lage mat"
+        Glose(44, 2) = "Cook"
+        Glose(44, 3) = "Kochen"
+        Glose(44, 4) = "Cuisiner"
+        Glose(45, 1) = " kj›re bil"
+        Glose(45, 2) = "Drive"
+        Glose(45, 3) = "Laufwerk"
+        Glose(45, 4) = "conduire"
+        Glose(46, 1) = "Teppe"
+        Glose(46, 2) = "Carpet"
+        Glose(46, 3) = "Teppichboden"
+        Glose(46, 4) = "Tapis"
+        Glose(47, 1) = "Trampoline"
+        Glose(47, 2) = "Trampoline"
+        Glose(47, 3) = "Trampolin"
+        Glose(47, 4) = "Trampoline"
+        Glose(48, 1) = "Asfalt"
+        Glose(48, 2) = "Asphalt"
+        Glose(48, 3) = "Asphalt"
+        Glose(48, 4) = "Asphalte"
+        Glose(49, 1) = "Lys"
+        Glose(49, 2) = "Light"
+        Glose(49, 3) = "Light"
+        Glose(49, 4) = "LumiŠre"
+        Glose(50, 1) = "Fyrhus"
+        Glose(50, 2) = "Lighthouse"
+        Glose(50, 3) = "Leuchtturm"
+        Glose(50, 4) = "Lighthouse"
+        Glose(51, 1) = "Eventyr"
+        Glose(51, 2) = "Adventure"
+        Glose(51, 3) = "Abenteuer"
+        Glose(51, 4) = "Aventure"
+        Glose(52, 1) = "Vegg"
+        Glose(52, 2) = "Wall"
+        Glose(52, 3) = "Wand"
+        Glose(52, 4) = "Mur"
+        Glose(53, 1) = "Romskip"
+        Glose(53, 2) = "Spacecraft"
+        Glose(53, 3) = "Raumfahrzeuge"
+        Glose(53, 4) = "Les Vaisseaux Spatiaux"
+        Glose(54, 1) = "Grill"
+        Glose(54, 2) = "Grill"
+        Glose(54, 3) = "Grill"
+        Glose(54, 4) = "Grill"
+        Glose(55, 1) = "Regn"
+        Glose(55, 2) = "Rain"
+        Glose(55, 3) = "Regen "
+        Glose(55, 4) = "Rain"
+        Glose(56, 1) = "Parkeringshus"
+        Glose(56, 2) = "Garage"
+        Glose(56, 3) = "Garage"
+        Glose(56, 4) = "Garage"
+        Glose(57, 1) = "Postkasse"
+        Glose(57, 2) = "Mailbox"
+        Glose(57, 3) = "Mailbox"
+        Glose(57, 4) = "BoŒte aux lettres"
+        Glose(58, 1) = "Diamanter"
+        Glose(58, 2) = "Diamonds"
+        Glose(58, 3) = "Diamanten"
+        Glose(58, 4) = "des diamants"
+        Glose(59, 1) = "Kl‘r"
+        Glose(59, 2) = "Clothing"
+        Glose(59, 3) = "Bekleidungs"
+        Glose(59, 4) = "de vˆtements"
+        Glose(60, 1) = "Fris›r"
+        Glose(60, 2) = "Hairdresser"
+        Glose(60, 3) = "Friseur"
+        Glose(60, 4) = "salon de coiffure"
+        Glose(61, 1) = "Mekaniker"
+        Glose(61, 2) = "Mechanic"
+        Glose(61, 3) = "Mechaniker"
+        Glose(61, 4) = "mŠcanique"
+        Glose(62, 1) = "Turistattraksjon"
+        Glose(62, 2) = "a tourist attraction "
+        Glose(62, 3) = "Eine Touristische Attraktion"
+        Glose(62, 4) = "Une attraction touristique"
+        Glose(63, 1) = "Fabrikk"
+        Glose(63, 2) = "Factory"
+        Glose(63, 3) = "Factory"
+        Glose(63, 4) = "l’usine"
+        Glose(64, 1) = "Skog"
+        Glose(64, 2) = "Forest"
+        Glose(64, 3) = "Wald"
+        Glose(64, 4) = "La Forˆt"
+        Glose(65, 1) = "Langrenn "
+        Glose(65, 2) = "Cross Country"
+        Glose(65, 3) = "Langlaufen"
+        Glose(65, 4) = "Ski"
+        Glose(66, 1) = "Fotball"
+        Glose(66, 2) = "Football"
+        Glose(66, 3) = "Fussball"
+        Glose(66, 4) = "football"
+        Glose(67, 1) = "Heisekran"
+        Glose(67, 2) = "Crane "
+        Glose(67, 3) = "Kran"
+        Glose(67, 4) = "Grue"
+        Glose(68, 1) = "Gaffeltruck"
+        Glose(68, 2) = "Forklift truck"
+        Glose(68, 3) = "Gabelstapler"
+        Glose(68, 4) = "Chariot ŠlŠvateur"
+        Glose(69, 1) = "Tog"
+        Glose(69, 2) = "Train"
+        Glose(69, 3) = "Zug"
+        Glose(69, 4) = "Train"
+        Glose(70, 1) = "Taxi"
+        Glose(70, 2) = "Taxi"
+        Glose(70, 3) = "Taxi"
+        Glose(70, 4) = "Taxi"
+        Glose(71, 1) = "Vann"
+        Glose(71, 2) = "Water"
+        Glose(71, 3) = "Wasser"
+        Glose(71, 4) = "De l’eau"
+        Glose(72, 1) = "Landbruk"
+        Glose(72, 2) = "Agriculture"
+        Glose(72, 3) = "Landwirtshaft"
+        Glose(72, 4) = "L’agriculture"
+        Glose(73, 1) = "Statsminister"
+        Glose(73, 2) = "Prime minister"
+        Glose(73, 3) = "Herr Ministerpr„sident"
+        Glose(73, 4) = "Le Premier ministre"
+        Glose(74, 1) = "Justisminister"
+        Glose(74, 2) = "Justice"
+        Glose(74, 3) = "Justiz"
+        Glose(74, 4) = "De la Justice"
+        Glose(75, 1) = "Politi"
+        Glose(75, 2) = "Police"
+        Glose(75, 3) = "Polizei"
+        Glose(75, 4) = "La police"
+        Glose(76, 1) = "Lege"
+        Glose(76, 2) = "Doctor"
+        Glose(76, 3) = "Artz"
+        Glose(76, 4) = "mŠdecin"
+        Glose(77, 1) = "Brannmann"
+        Glose(77, 2) = "Fireman"
+        Glose(77, 3) = "Feuerwehrmann"
+        Glose(77, 4) = "Pompiers"
+        Glose(78, 1) = "Hytte"
+        Glose(78, 2) = "Cabin"
+        Glose(78, 3) = "Kabine"
+        Glose(78, 4) = "Maison"
+        Glose(79, 1) = "Skip"
+        Glose(79, 2) = "Ship"
+        Glose(79, 3) = "Skip"
+        Glose(79, 4) = "Bateau"
+        Glose(80, 1) = "Datamaskin "
+        Glose(80, 2) = "computer "
+        Glose(80, 3) = "Computer "
+        Glose(80, 4) = "Ordinateur"
+        Glose(81, 1) = "Katt"
+        Glose(81, 2) = "Cat"
+        Glose(81, 3) = "Katze"
+        Glose(81, 4) = "Chat"
+        Glose(82, 1) = "Hund"
+        Glose(82, 2) = "Dog"
+        Glose(82, 3) = "Hund"
+        Glose(82, 4) = "Chien"
+        Glose(83, 1) = "Frokostblanding"
+        Glose(83, 2) = "Cereal"
+        Glose(83, 3) = "Getreide"
+        Glose(83, 4) = "cŠrŠales"
+        Glose(84, 1) = "Fjell"
+        Glose(84, 2) = "Mountain"
+        Glose(84, 3) = "Berg"
+        Glose(84, 4) = "Montagne"
+        Glose(85, 1) = "By"
+        Glose(85, 2) = "Town"
+        Glose(85, 3) = "Stadt"
+        Glose(85, 4) = "Ville"
+        Glose(86, 1) = "Landsby"
+        Glose(86, 2) = "Village"
+        Glose(86, 3) = "Dorf"
+        Glose(86, 4) = "Vilage"
+        Glose(87, 1) = "Ananas"
+        Glose(87, 2) = "Pineapple"
+        Glose(87, 3) = "Ananas"
+        Glose(87, 4) = "d’ananas"
+        Glose(88, 1) = "Ekorn"
+        Glose(88, 2) = "Red Squirrel"
+        Glose(88, 3) = "Eichh"
+        Glose(88, 4) = "de l’Šcureuil roux"
+        Glose(89, 1) = "Pinnsvin"
+        Glose(89, 2) = "Porcupine"
+        Glose(89, 3) = "Das Stachelschwein"
+        Glose(89, 4) = "le porc-Špic"
+        Glose(90, 1) = "Okse"
+        Glose(90, 2) = "Beef"
+        Glose(90, 3) = "Rind"
+        Glose(90, 4) = "la Viande bovine"
+        Glose(91, 1) = "Ku"
+        Glose(91, 2) = "Cow"
+        Glose(91, 3) = "Kuh"
+        Glose(91, 4) = "Vache"
+        Glose(92, 1) = "Gris"
+        Glose(92, 2) = "Pig"
+        Glose(92, 3) = "Schwein"
+        Glose(92, 4) = "cochon"
+        Glose(93, 1) = "Flue"
+        Glose(93, 2) = "Flue"
+        Glose(93, 3) = "Rauchfang"
+        Glose(93, 4) = "De fumŠe"
+        Glose(94, 1) = "Egg "
+        Glose(94, 2) = "Egg"
+        Glose(94, 3) = "Ei"
+        Glose(94, 4) = "Des Oeufs"
+        Glose(95, 1) = "Omelett"
+        Glose(95, 2) = "Omelette"
+        Glose(95, 3) = "Omelett"
+        Glose(95, 4) = "Omelette"
+        Glose(96, 1) = "Hane"
+        Glose(96, 2) = "Rooster"
+        Glose(96, 3) = "Hahn"
+        Glose(96, 4) = "Coq"
+        Glose(97, 1) = "Kylling"
+        Glose(97, 2) = "Chicken"
+        Glose(97, 3) = "Huhn"
+        Glose(97, 4) = "Poulet"
+        Glose(98, 1) = "Kalv"
+        Glose(98, 2) = "Veal"
+        Glose(98, 3) = "Kalb"
+        Glose(98, 4) = "Veau"
+        Glose(99, 1) = "Slange"
+        Glose(99, 2) = "Snake"
+        Glose(99, 3) = "Schlange"
+        Glose(99, 4) = "Serpent"
+        Glose(100, 1) = "Tiger"
+        Glose(100, 2) = "Tiger"
+        Glose(100, 3) = "Tiger"
+        Glose(100, 4) = "Tigre"
+        Glose(101, 1) = "L›ve"
+        Glose(101, 2) = "Lion"
+        Glose(101, 3) = "L"
+        Glose(101, 4) = "Lion"
+        Glose(102, 1) = "Hyene"
+        Glose(102, 2) = "Hyene"
+        Glose(102, 3) = "Hy„ne"
+        Glose(102, 4) = "La HyŠne"
+        Glose(103, 1) = "Avis"
+        Glose(103, 2) = "Newspaper"
+        Glose(103, 3) = "Zeitungen"
+        Glose(103, 4) = "Les Journaux"
+        Glose(104, 1) = "Frosk"
+        Glose(104, 2) = "Frog"
+        Glose(104, 3) = "Frosch"
+        Glose(104, 4) = "La grenouille"
+        Glose(105, 1) = "And"
+        Glose(105, 2) = "Duck"
+        Glose(105, 3) = "Duck"
+        Glose(105, 4) = "Canard"
+        Glose(106, 1) = "rn"
+        Glose(106, 2) = "Eagle"
+        Glose(106, 3) = "Goldene Adler "
+        Glose(106, 4) = "L’aigle royal"
+        Glose(107, 1) = "Traktor"
+        Glose(107, 2) = "Tractor"
+        Glose(107, 3) = "Traktor"
+        Glose(107, 4) = "Un Tracteur"
+        Glose(108, 1) = "Laks"
+        Glose(108, 2) = "Salmon"
+        Glose(108, 3) = "Lachs"
+        Glose(108, 4) = "Le saumon"
+        Glose(109, 1) = "Torsk"
+        Glose(109, 2) = "Cod"
+        Glose(109, 3) = "Kabeljau"
+        Glose(109, 4) = "La morue"
+        Glose(110, 1) = "rret"
+        Glose(110, 2) = "Trout"
+        Glose(110, 3) = "Forelle"
+        Glose(110, 4) = "La truite"
+        Glose(111, 1) = "Sau"
+        Glose(111, 2) = "Sheep"
+        Glose(111, 3) = "Schafe"
+        Glose(111, 4) = "De moutons"
+        Glose(112, 1) = "Blekksprut"
+        Glose(112, 2) = "Octopus"
+        Glose(112, 3) = "Krake"
+        Glose(112, 4) = "De poulpe"
+        Glose(113, 1) = "Skilpadde"
+        Glose(113, 2) = "Turtle"
+        Glose(113, 3) = "Schildkr"
+        Glose(113, 4) = "Tortue"
+        Glose(114, 1) = "Krabbe"
+        Glose(114, 2) = "Crab"
+        Glose(114, 3) = "krabbe"
+        Glose(114, 4) = "Le crabe"
+        Glose(115, 1) = "Supermann"
+        Glose(115, 2) = "Superman"
+        Glose(115, 3) = "šbermann"
+        Glose(115, 4) = "Le Superman"
+    End Sub ' Her ligger tabelen
+
+    Private Sub cmdStart_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdStart.Click
+        SvarProsedyre()
+
+    End Sub
+
+    Private Sub lblSvarAlt1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lblSvarAlt1.Click
+        If lblSvarAlt1.Text = RettSvar Then
+            RettProsedyre()
+        Else
+            FeilProsedyre()
+
+        End If
+    End Sub
+
+    Private Sub lblSvarAlt2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lblSvarAlt2.Click
+
+        If lblSvarAlt2.Text = RettSvar Then
+            RettProsedyre()
+        Else
+            FeilProsedyre()
+
+        End If
+    End Sub
+
+    Private Sub lblSvarAlt3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lblSvarAlt3.Click
+
+        If lblSvarAlt3.Text = RettSvar Then
+            RettProsedyre()
+        Else
+            FeilProsedyre()
+
+        End If
+    End Sub
+
+    Private Sub lblSvarAlt4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lblSvarAlt4.Click
+
+        If lblSvarAlt4.Text = RettSvar Then
+            RettProsedyre()
+        Else
+            FeilProsedyre()
+
+        End If
+    End Sub
+
+    Private Sub lblSvarAlt5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lblSvarAlt5.Click
+
+        If lblSvarAlt5.Text = RettSvar Then
+            RettProsedyre()
+        Else
+            FeilProsedyre()
+        End If
+    End Sub
+
+    Private Sub ComboBox1_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdHoppOver.Click
+        SvarProsedyre()
+        Poeng = Poeng - 2
+        hopp = hopp + 1
+        AntForsok = AntForsok + 1
+        Statistikk()
+    End Sub
+End Class
